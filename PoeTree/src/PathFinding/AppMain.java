@@ -2,6 +2,7 @@ package PathFinding;
 
 import java.awt.Point;
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -74,6 +75,50 @@ public class AppMain {
 		}
 		
 		read.close();
+		ArrayList<Group> groups = findGroups();
+
+		
+	}
+	
+
+	public static ArrayList<Group> findGroups() throws IOException{
+		
+		ArrayList<Group> groups = null;
+		
+		BufferedReader read = new BufferedReader(new FileReader("docs\\poeskilltree-site.txt"));
+		String line = "";
+		boolean setGroup = false;
+		while((line= read.readLine())!=null){
+			if (line.length()>8 && line.substring(1, 7).equals("groups")){setGroup = true;continue;}
+			if(setGroup){
+				String[] s = line.split("\\[");
+				
+				for(int i =1; i<s.length;i++){
+					String temp = s[i];
+					temp=temp.substring(0, temp.indexOf(']'));
+					s[i] = temp;
+				}
+				
+				for(int i =1; i<s.length; i++){
+					String[] temp = s[i].split(",");
+					
+					ArrayList<Integer> templist = new ArrayList<Integer>();
+					for(String b:temp){
+						templist.add((Integer.parseInt(b)));
+					}
+					
+					Group group = new Group(i, templist);
+				}
+				
+				
+				
+				
+			}
+			setGroup = false;
+		}
+		read.close();
+		
+		return groups;
 	}
 
 }
